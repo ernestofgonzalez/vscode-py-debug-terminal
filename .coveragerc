@@ -1,0 +1,8 @@
+[run]
+source = pydebug
+omit =
+    pydebug/test_*.py
+
+[report]
+show_missing = True
+skip_covered = False

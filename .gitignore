@@ -2,6 +2,9 @@ node_modules/
 dist/
 out/
 .vscode-test/
+coverage/
+.nyc_output/
+.coverage
 *.vsix
 .DS_Store
 *.log

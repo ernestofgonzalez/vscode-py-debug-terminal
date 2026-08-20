@@ -6,6 +6,8 @@ example/**
 out/**
 .vscode-test/**
 .github/**
+coverage/**
+.nyc_output/**
 node_modules/**
 media/design/**
 .gitignore
@@ -13,6 +15,8 @@ media/design/**
 esbuild.js
 tsconfig.json
 .mocharc.unit.js
+.nycrc.json
+.coveragerc
 tsconfig.integration.json
 pydebug/test_*.py
 **/*.ts

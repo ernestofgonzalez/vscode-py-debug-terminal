@@ -148,6 +148,24 @@ GUI process, so it needs a display: it works locally and on CI (macOS runners, o
 Linux under `xvfb-run`). [`.github/workflows/ci.yml`](.github/workflows/ci.yml)
 runs the fast suite plus the integration tests on Ubuntu and macOS.
 
+### Coverage
+
+Coverage uses [`nyc`](https://github.com/istanbuljs/nyc) (Istanbul) for the
+TypeScript side, as in js-debug, and [`coverage.py`](https://coverage.readthedocs.io/)
+for the Python bootstrap:
+
+```bash
+npm run coverage      # nyc over the tsx unit run -> text + coverage/ (html, lcov.info)
+npm run coverage:py   # coverage.py over the bootstrap tests (needs: pip install coverage)
+```
+
+`nyc` maps back to the original `.ts` via tsx's source maps
+([`.nycrc.json`](.nycrc.json)); `coverage.py` is configured by
+[`.coveragerc`](.coveragerc). Both measure the **unit-tested** code paths, so the
+numbers reflect the pure logic (the rendezvous protocol and the bootstrap's
+attach/skip filtering) — not the debugpy/GUI paths, which are exercised by the
+integration layer instead. CI runs both on every push.
+
 ## Status
 
 This is a scaffold: the full injection → rendezvous → attach path is implemented
