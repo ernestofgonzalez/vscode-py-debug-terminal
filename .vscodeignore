@@ -1,0 +1,23 @@
+# Everything here is excluded from the packaged .vsix.
+# NOTE: `pydebug/` and `dist/` are intentionally NOT listed — they must ship.
+.vscode/**
+src/**
+example/**
+out/**
+.vscode-test/**
+.github/**
+node_modules/**
+media/design/**
+.gitignore
+.git/**
+esbuild.js
+tsconfig.json
+.mocharc.unit.js
+tsconfig.integration.json
+pydebug/test_*.py
+**/*.ts
+**/*.map
+**/.DS_Store
+**/__pycache__/**
+**/*.pyc
+*.vsix

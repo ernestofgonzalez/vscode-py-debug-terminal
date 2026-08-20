@@ -1,0 +1,126 @@
+{
+  "name": "vscode-py-debug",
+  "displayName": "Python Debug Terminal",
+  "description": "A Python Debug Terminal: every Python process you launch attaches to the debugger automatically, the way the built-in JavaScript Debug Terminal works for Node.",
+  "version": "0.0.1",
+  "publisher": "example-publisher",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Debuggers",
+    "Other"
+  ],
+  "keywords": [
+    "python",
+    "debug",
+    "debugpy",
+    "terminal",
+    "auto attach"
+  ],
+  "main": "./dist/extension.js",
+  "extensionDependencies": [
+    "ms-python.debugpy"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "vscode-py-debug.createDebugTerminal",
+        "title": "Create Python Debug Terminal",
+        "category": "Python Debug",
+        "icon": "$(debug-alt)"
+      }
+    ],
+    "terminal": {
+      "profiles": [
+        {
+          "id": "vscode-py-debug.debugTerminal",
+          "title": "Python Debug Terminal",
+          "icon": "$(debug-alt)"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Python Debug Terminal",
+      "properties": {
+        "pythonDebugTerminal.waitForClient": {
+          "type": "boolean",
+          "default": true,
+          "description": "Pause each launched Python process at startup until the debugger has attached and sent its breakpoints. Required for breakpoints to reliably bind (short scripts otherwise finish before the debugger connects). Once attached this returns almost instantly; it only blocks up to 'waitTimeout' if the attach fails."
+        },
+        "pythonDebugTerminal.waitTimeout": {
+          "type": "number",
+          "default": 10,
+          "description": "Maximum seconds to wait for the debugger to attach when 'waitForClient' is enabled."
+        },
+        "pythonDebugTerminal.skipPrograms": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "pip",
+            "pip3",
+            "black",
+            "ruff",
+            "mypy",
+            "flake8",
+            "isort",
+            "pylint",
+            "poetry",
+            "pdm",
+            "uv",
+            "virtualenv"
+          ],
+          "description": "Program names (argv[0] basenames / path components) that should NOT be attached to. These are tooling processes that would otherwise create noisy debug sessions."
+        },
+        "pythonDebugTerminal.justMyCode": {
+          "type": "boolean",
+          "default": true,
+          "description": "Restrict debugging to your own code (passed through to debugpy's 'justMyCode')."
+        },
+        "pythonDebugTerminal.handleForkedChildren": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable debugpy's subprocess patching so os.fork()/multiprocessing children are debugged too. Off by default because environment inheritance already covers subprocess/exec'd children; forked children never re-run interpreter startup, so they need this."
+        },
+        "pythonDebugTerminal.debugLogging": {
+          "type": "boolean",
+          "default": false,
+          "description": "Write verbose diagnostics from the in-process bootstrap to stderr (sets PYDEBUG_DEBUG=1)."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "node esbuild.js",
+    "watch": "node esbuild.js --watch",
+    "package": "node esbuild.js --production",
+    "typecheck": "tsc --noEmit",
+    "test": "npm run test:types && npm run test:unit && npm run test:py",
+    "test:types": "tsc --noEmit",
+    "test:unit": "tsx node_modules/mocha/bin/mocha.js --config .mocharc.unit.js",
+    "test:py": "python3 -m unittest discover -s pydebug -p 'test_*.py'",
+    "pretest:integration": "npm run compile && tsc -p tsconfig.integration.json",
+    "test:integration": "node out/test/runTest.js",
+    "vsce:package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.3.11",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.11.0",
+    "@types/sinon": "^17.0.3",
+    "@types/vscode": "^1.75.0",
+    "@vscode/test-electron": "^3.1.0",
+    "@vscode/vsce": "^2.26.0",
+    "chai": "^4.4.1",
+    "esbuild": "^0.21.5",
+    "mocha": "^10.8.2",
+    "nyc": "^18.0.0",
+    "sinon": "^17.0.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.4.5"
+  }
+}

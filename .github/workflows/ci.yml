@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run test:types
+
+      - name: Unit tests (TypeScript)
+        run: npm run test:unit
+
+      - name: Unit tests (Python bootstrap)
+        run: npm run test:py
+
+      # The integration tests launch a real VS Code instance, which needs a
+      # display server on Linux; macOS runners provide one.
+      - name: Integration tests (Linux)
+        if: runner.os == 'Linux'
+        run: xvfb-run -a npm run test:integration
+
+      - name: Integration tests (macOS)
+        if: runner.os == 'macOS'
+        run: npm run test:integration
