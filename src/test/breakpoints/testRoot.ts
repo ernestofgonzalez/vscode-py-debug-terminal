@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import { GoldenText, Normalizer } from "./golden";
 import { DapTrackerFactory, Logger, SessionTracker, Stopped, withTimeout } from "./dapTracker";
 
-const EXT_ID = "example-publisher.vscode-py-debug-terminal";
+const EXT_ID = "ernestofgonzalez.vscode-py-debug-terminal";
 
 /** A breakpoint to set through the VS Code UI model. `line` is 1-based, matching
  *  the editor. */
