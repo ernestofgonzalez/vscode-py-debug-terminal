@@ -205,20 +205,34 @@ export class TestRoot {
     this.golden.assertLog();
   }
 
-  /** Tear down: clear breakpoints, stop sessions, dispose terminal + listeners. */
+  /** Tear down: stop sessions, then clear breakpoints and dispose terminal +
+   *  listeners. We stop and wait for every session to fully terminate *before*
+   *  clearing breakpoints. Removing them while VS Code still considers a session
+   *  active makes it sync the change to that session's adapter — and for a short
+   *  fixture the debuggee has usually already exited, so the sync logs a benign
+   *  but noisy "Server disconnected unexpectedly … at removeBreakpoints". Once
+   *  every session has ended there is nothing to sync. */
   async dispose(): Promise<void> {
-    try {
-      if (vscode.debug.breakpoints.length) {
-        vscode.debug.removeBreakpoints(vscode.debug.breakpoints);
-      }
-    } catch {
-      /* ignore */
-    }
     try {
       await vscode.debug.stopDebugging();
     } catch {
       /* ignore */
     }
+    await this.waitForAllTerminated(3000);
+
+    // Skip breakpoint removal while any session is still live (its adapter would
+    // be synced to); the next test's create() clears stale breakpoints anyway.
+    const anyLive = this.sessions.some((s) => !this.terminated.has(s.id));
+    if (!anyLive) {
+      try {
+        if (vscode.debug.breakpoints.length) {
+          vscode.debug.removeBreakpoints(vscode.debug.breakpoints);
+        }
+      } catch {
+        /* ignore */
+      }
+    }
+
     try {
       this.terminal?.dispose();
     } catch {
@@ -234,6 +248,15 @@ export class TestRoot {
     // Small grace period so sessions finish tearing down before the next test
     // registers its own tracker factory.
     await delay(500);
+  }
+
+  /** Wait (bounded) for every started session to fire onDidTerminate, so
+   *  teardown doesn't race a still-attached adapter. */
+  private async waitForAllTerminated(timeoutMs: number): Promise<void> {
+    const pending = this.sessions.filter((s) => !this.terminated.has(s.id));
+    await Promise.all(
+      pending.map((s) => this.waitForTermination(s, timeoutMs).catch(() => {})),
+    );
   }
 
   private onSessionCreate(session: vscode.DebugSession, tracker: SessionTracker): void {

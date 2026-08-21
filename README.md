@@ -134,19 +134,48 @@ npm run test:integration  # launches a real VS Code instance (see below)
 
 Mirroring js-debug's `test:golden`/`runTest.js` layer,
 [`src/test/runTest.ts`](src/test/runTest.ts) uses `@vscode/test-electron` to
-download a real VS Code, install the `ms-python.debugpy` dependency, and run
-`*.itest.ts` specs inside the extension host:
+download a real VS Code, install the `ms-python.debugpy` dependency, open the
+[fixtures folder](src/test/fixtures/) as the workspace, and run `*.itest.ts`
+specs (found recursively) inside the extension host:
 
 - [`src/test/extension.itest.ts`](src/test/extension.itest.ts) — the extension
   activates and registers its command.
 - [`src/test/terminal.itest.ts`](src/test/terminal.itest.ts) — `buildTerminalEnv`
   injects the injector dir on `PYTHONPATH` plus the IPC/token/wait flags.
+- [`src/test/breakpoints/`](src/test/breakpoints/) — the end-to-end breakpoint
+  suite (see below).
 
 These compile to `out/` via [`tsconfig.integration.json`](tsconfig.integration.json)
 (kept separate from the esbuild bundle and the tsx unit run). The run launches a
 GUI process, so it needs a display: it works locally and on CI (macOS runners, or
 Linux under `xvfb-run`). [`.github/workflows/ci.yml`](.github/workflows/ci.yml)
 runs the fast suite plus the integration tests on Ubuntu and macOS.
+
+### Breakpoint E2E (golden snapshots)
+
+[`src/test/breakpoints/`](src/test/breakpoints/) proves the thing we actually
+own: that our injection → rendezvous → attach pipeline **delivers the user's
+breakpoints to debugpy reliably**, including the first-executable-line case that
+motivates [`sitecustomize`'s `wait_for_client`](pydebug/sitecustomize.py). Each
+test drives the real user path — set breakpoints through the VS Code UI model,
+open a Python Debug Terminal via our command, run a fixture — and observes
+debugpy's DAP traffic through a `DebugAdapterTracker`, then snapshots a curated,
+normalized log against a committed `.txt` **golden** (js-debug's `assertLog()`
+analog). Coverage: set-before-launch, first line, verified-line reporting,
+multiple/conditional/hitCondition hits, logpoints, breakpoint removal, and a
+child subprocess that attaches as its own session purely via environment
+inheritance. See [`PLAN.md`](src/test/breakpoints/PLAN.md) for the full rationale.
+
+```bash
+npm run test:integration     # assert against the committed goldens
+npm run test:golden:reset    # RESET_GOLDEN=1 — regenerate goldens, then hand-review the diff
+```
+
+Goldens are sensitive to the debugpy version (**ms-python.debugpy `2026.6.0`** at
+time of writing); on an intentional bump, regenerate with `test:golden:reset` and
+eyeball the diff. Aggressive normalization (paths → `${workspaceFolder}`, and a
+small allow-list of DAP messages rather than raw dumps) is what keeps that diff
+reviewable.
 
 ### Coverage
 
