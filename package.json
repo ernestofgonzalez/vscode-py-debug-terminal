@@ -1,5 +1,5 @@
 {
-  "name": "vscode-py-debug",
+  "name": "vscode-py-debug-terminal",
   "displayName": "Python Debug Terminal",
   "description": "A Python Debug Terminal: every Python process you launch attaches to the debugger automatically, the way the built-in JavaScript Debug Terminal works for Node.",
   "version": "0.0.1",
@@ -26,7 +26,7 @@
   "contributes": {
     "commands": [
       {
-        "command": "vscode-py-debug.createDebugTerminal",
+        "command": "vscode-py-debug-terminal.createDebugTerminal",
         "title": "Create Python Debug Terminal",
         "category": "Python Debug",
         "icon": "$(debug-alt)"
@@ -35,7 +35,7 @@
     "terminal": {
       "profiles": [
         {
-          "id": "vscode-py-debug.debugTerminal",
+          "id": "vscode-py-debug-terminal.debugTerminal",
           "title": "Python Debug Terminal",
           "icon": "$(debug-alt)"
         }

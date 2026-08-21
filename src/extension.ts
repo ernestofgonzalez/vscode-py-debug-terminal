@@ -32,7 +32,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
       },
     }),
 
-    vscode.commands.registerCommand("vscode-py-debug.createDebugTerminal", () => {
+    vscode.commands.registerCommand("vscode-py-debug-terminal.createDebugTerminal", () => {
       if (!rendezvous?.isRunning) {
         void vscode.window.showErrorMessage("Python Debug Terminal is not ready yet.");
         return;

@@ -3,7 +3,7 @@ import * as path from "path";
 import { RendezvousServer } from "./rendezvous";
 
 /** Must match `contributes.terminal.profiles[].id` in package.json. */
-export const TERMINAL_PROFILE_ID = "vscode-py-debug.debugTerminal";
+export const TERMINAL_PROFILE_ID = "vscode-py-debug-terminal.debugTerminal";
 const TERMINAL_NAME = "Python Debug Terminal";
 
 /**

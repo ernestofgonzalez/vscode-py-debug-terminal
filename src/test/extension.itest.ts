@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import * as vscode from "vscode";
 
-const EXT_ID = "example-publisher.vscode-py-debug";
+const EXT_ID = "example-publisher.vscode-py-debug-terminal";
 
 describe("extension activation (integration)", () => {
   it("finds, activates, and registers the create-terminal command", async () => {
@@ -12,6 +12,6 @@ describe("extension activation (integration)", () => {
     expect(ext!.isActive).to.equal(true);
 
     const commands = await vscode.commands.getCommands(true);
-    expect(commands).to.include("vscode-py-debug.createDebugTerminal");
+    expect(commands).to.include("vscode-py-debug-terminal.createDebugTerminal");
   });
 });

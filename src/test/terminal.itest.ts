@@ -4,7 +4,7 @@ import * as vscode from "vscode";
 import { buildTerminalEnv } from "../terminal";
 import { RendezvousServer } from "../rendezvous";
 
-const EXT_ID = "example-publisher.vscode-py-debug";
+const EXT_ID = "example-publisher.vscode-py-debug-terminal";
 
 describe("buildTerminalEnv (integration)", () => {
   it("injects the injector dir on PYTHONPATH plus the IPC/token/wait flags", async () => {

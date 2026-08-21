@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import { GoldenText, Normalizer } from "./golden";
 import { DapTrackerFactory, Logger, SessionTracker, Stopped, withTimeout } from "./dapTracker";
 
-const EXT_ID = "example-publisher.vscode-py-debug";
+const EXT_ID = "example-publisher.vscode-py-debug-terminal";
 
 /** A breakpoint to set through the VS Code UI model. `line` is 1-based, matching
  *  the editor. */
@@ -128,7 +128,7 @@ export class TestRoot {
       });
       this.disposables.push(d);
     });
-    await vscode.commands.executeCommand("vscode-py-debug.createDebugTerminal");
+    await vscode.commands.executeCommand("vscode-py-debug-terminal.createDebugTerminal");
     const term = await withTimeout(opened, 10000, "debug terminal to open");
     this.terminal = term;
     await this.waitForShellReady(term);
