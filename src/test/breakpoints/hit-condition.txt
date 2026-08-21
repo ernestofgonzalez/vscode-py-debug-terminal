@@ -1,0 +1,5 @@
+setBreakpoints loop.py verified=true line=7
+stopped reason=breakpoint
+i=2
+total=1
+stops=1

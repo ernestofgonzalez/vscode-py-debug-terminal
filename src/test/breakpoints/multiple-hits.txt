@@ -1,0 +1,6 @@
+setBreakpoints loop.py verified=true line=7
+stop#0 i=0 total=0
+stop#1 i=1 total=0
+stop#2 i=2 total=1
+stop#3 i=3 total=3
+stop#4 i=4 total=6

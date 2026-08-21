@@ -105,6 +105,7 @@
     "test:py": "python3 -m unittest discover -s pydebug -p 'test_*.py'",
     "pretest:integration": "npm run compile && tsc -p tsconfig.integration.json",
     "test:integration": "node out/test/runTest.js",
+    "test:golden:reset": "RESET_GOLDEN=1 npm run test:integration",
     "coverage": "nyc tsx node_modules/mocha/bin/mocha.js --config .mocharc.unit.js",
     "coverage:py": "python3 -m coverage run -m unittest discover -s pydebug -p 'test_*.py' && python3 -m coverage report -m",
     "vsce:package": "vsce package"

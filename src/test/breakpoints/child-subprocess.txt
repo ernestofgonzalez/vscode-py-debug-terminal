@@ -1,0 +1,5 @@
+sessions=2
+setBreakpoints child.py verified=true line=2
+stopped reason=breakpoint
+frame#0 work ${workspaceFolder}/child.py:2
+x=21

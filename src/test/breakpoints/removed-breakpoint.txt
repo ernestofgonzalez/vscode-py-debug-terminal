@@ -1,0 +1,6 @@
+setBreakpoints loop.py verified=true line=5
+setBreakpoints loop.py verified=true line=9
+stopped reason=breakpoint
+frame#0 <module> ${workspaceFolder}/loop.py:5
+removed loop.py:9
+stops=1

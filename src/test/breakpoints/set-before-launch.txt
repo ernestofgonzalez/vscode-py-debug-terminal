@@ -1,0 +1,5 @@
+setBreakpoints simple.py verified=true line=5
+stopped reason=breakpoint
+frame#0 add ${workspaceFolder}/simple.py:5
+frame#1 main ${workspaceFolder}/simple.py:10
+frame#2 <module> ${workspaceFolder}/simple.py:15

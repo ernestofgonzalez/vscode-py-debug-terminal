@@ -65,6 +65,17 @@ async function onAnnounce(info: AnnouncePayload): Promise<void> {
     subProcess: cfg.get<boolean>("handleForkedChildren") ?? false,
   };
 
+  // Run debugpy's own adapter under the interpreter that is already running the
+  // debuggee. ms-python.debugpy's getDebugAdapterPython() honours this before
+  // falling back to the Python extension's *selected* interpreter -- of which
+  // there may be none in a fresh/headless window, where the fallback pops a
+  // modal "select an interpreter" prompt and the attach never happens. Pinning
+  // it to the debuggee's own interpreter is both more correct and what makes the
+  // attach work with no interpreter configured.
+  if (info.python) {
+    config.debugAdapterPython = info.python;
+  }
+
   const folder = folderForCwd(info.cwd);
   const started = await vscode.debug.startDebugging(folder, config);
   if (!started) {

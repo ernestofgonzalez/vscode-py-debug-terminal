@@ -1,0 +1,5 @@
+setBreakpoints logpoints.py verified=true line=2
+output greeting a
+output greeting b
+output greeting c
+stops=0
