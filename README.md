@@ -2,8 +2,8 @@
 
 A **Python Debug Terminal** for VS Code: open one, and every Python process you
 launch from it attaches to the debugger automatically — including child
-processes it spawns. This is the Python analogue of the built-in **JavaScript
-Debug Terminal**.
+processes it spawns. The intention with this extension was to build a Python analogue 
+of the built-in [JavaScript Debug Terminal](https://github.com/microsoft/vscode-js-debug).
 
 ```
 ┌──────────────────────┐        announces {pid, port, token}        ┌────────────────────┐
@@ -14,18 +14,39 @@ Debug Terminal**.
 └──────────────────────┘                                            └────────────────────┘
 ```
 
+## Usage
+
+Open a **Python Debug Terminal** and use Python from it exactly as you normally
+would — every process you launch attaches to the debugger on its own, and so do
+any child processes it spawns. No launch configuration, no `-m debugpy`, no code
+changes.
+
+**1. Open a Python Debug Terminal.** Open the Command Palette (<kbd>⇧⌘P</kbd>)
+and run **Create Python Debug Terminal**, or click the `⌄` dropdown next to the
+`+` in the terminal panel and pick **Python Debug Terminal** from the profile
+list.
+
+![Opening a Python Debug Terminal from the terminal profile dropdown](media/open-debug-terminal.png)
+
+**2. Set a breakpoint and run your script.** Set breakpoints the usual way — by
+clicking the editor gutter — then run your program from that terminal, e.g.
+`python app.py`. The process attaches automatically and stops at your
+breakpoints; the debug toolbar, call stack, and variables light up just as they
+would for a normal launch.
+
+![A script launched from the Python Debug Terminal pauses at a breakpoint with the debugger attached](media/breakpoint-hit.png)
+
+**3. Child processes come free.** Anything your script spawns — e.g.
+`subprocess.run([sys.executable, ...])` — inherits the terminal's environment and
+attaches as its own debug session, with no extra configuration. Try it with
+[`example/app.py`](example/app.py), which launches a child interpreter.
+
+The terminal behaves like any other integrated terminal; the only difference is
+the injected environment that makes each Python process phone home and attach.
+See [How it works](#how-it-works) for the mechanism, and [Settings](#settings)
+to tune wait-for-attach behavior, the skip-list, forked-child handling, and more.
+
 ## How it works
-
-The design mirrors the JavaScript Debug Terminal, with Python-appropriate
-substitutes for each moving part:
-
-| Concern | JavaScript Debug Terminal | Python Debug Terminal |
-| --- | --- | --- |
-| Injection | `NODE_OPTIONS=--require bootloader.js` | `sitecustomize.py` on `PYTHONPATH` |
-| Bootstrap | bootloader enables inspector, dials pipe | `sitecustomize` opens `debugpy.listen()`, dials TCP |
-| Rendezvous | IPC pipe owned by the extension | localhost TCP server owned by the extension |
-| One session / process | phones home per process | announces per process |
-| Children | env inheritance | env inheritance |
 
 1. **Injection.** When the terminal opens, the extension prepends
    [`pydebug/`](pydebug/) to `PYTHONPATH` and sets `PYDEBUG_IPC` (the rendezvous
@@ -200,4 +221,4 @@ integration layer instead. CI runs both on every push.
 This is a scaffold: the full injection → rendezvous → attach path is implemented
 and the Python/`PYTHONPATH` contracts are verified, but it has not been hardened
 for remote/SSH/container path mapping, Windows quoting edge cases, or a published
-Marketplace release.
+Marketplace _yet_ release.

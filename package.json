@@ -5,6 +5,14 @@
   "version": "0.0.1",
   "publisher": "example-publisher",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ernestofgonzalez/vscode-py-debug-terminal.git"
+  },
+  "homepage": "https://github.com/ernestofgonzalez/vscode-py-debug-terminal#readme",
+  "bugs": {
+    "url": "https://github.com/ernestofgonzalez/vscode-py-debug-terminal/issues"
+  },
   "engines": {
     "vscode": "^1.75.0"
   },
