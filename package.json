@@ -2,7 +2,7 @@
   "name": "vscode-py-debug-terminal",
   "displayName": "Python Debug Terminal",
   "description": "A Python Debug Terminal: every Python process you launch attaches to the debugger automatically, the way the built-in JavaScript Debug Terminal works for Node.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "ernestofgonzalez",
   "license": "MIT",
   "repository": {
