@@ -5,7 +5,7 @@ launch from it attaches to the debugger automatically — including child
 processes it spawns. The intention with this extension was to build a Python analogue 
 of the built-in [JavaScript Debug Terminal](https://github.com/microsoft/vscode-js-debug).
 
-VS Code can already [debug a Python file without a `launch.json`](https://code.visualstudio.com/docs/python/debugging)
+VS Code can already [debug a Python file](https://code.visualstudio.com/docs/python/debugging)
 — via the **Run and Debug** view or the **Python Debugger: Debug Python File**
 command. This extension is an alternative, terminal-first way to get there:
 rather than starting a debug session per file, you run Python however you like
@@ -131,11 +131,6 @@ Requires the `ms-python.debugpy` extension (declared as an extension dependency)
 which provides the `debugpy` debug type used to attach.
 
 ## Tests
-
-The setup follows [vscode-js-debug](https://github.com/microsoft/vscode-js-debug):
-`mocha` + `chai` + `sinon` run under [`tsx`](https://github.com/privatenumber/tsx)
-via [`.mocharc.unit.js`](.mocharc.unit.js), with `*.test.ts` specs colocated next
-to their sources. The Python bootstrap is covered by a stdlib `unittest` suite.
 
 ```bash
 npm test              # fast suite: types + unit (TS) + python
