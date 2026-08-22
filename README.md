@@ -5,6 +5,13 @@ launch from it attaches to the debugger automatically — including child
 processes it spawns. The intention with this extension was to build a Python analogue 
 of the built-in [JavaScript Debug Terminal](https://github.com/microsoft/vscode-js-debug).
 
+VS Code can already [debug a Python file without a `launch.json`](https://code.visualstudio.com/docs/python/debugging)
+— via the **Run and Debug** view or the **Python Debugger: Debug Python File**
+command. This extension is an alternative, terminal-first way to get there:
+rather than starting a debug session per file, you run Python however you like
+from the terminal, and each process — plus any child it spawns — attaches on its
+own.
+
 ```
 ┌──────────────────────┐        announces {pid, port, token}        ┌────────────────────┐
 │  Python Debug Term.   │  ── sitecustomize phones home over TCP ──▶ │  Extension (rendez- │
@@ -18,8 +25,7 @@ of the built-in [JavaScript Debug Terminal](https://github.com/microsoft/vscode-
 
 Open a **Python Debug Terminal** and use Python from it exactly as you normally
 would — every process you launch attaches to the debugger on its own, and so do
-any child processes it spawns. No launch configuration, no `-m debugpy`, no code
-changes.
+any child processes it spawns.
 
 **1. Open a Python Debug Terminal.** Open the Command Palette (<kbd>⇧⌘P</kbd>)
 and run **Create Python Debug Terminal**, or click the `⌄` dropdown next to the
